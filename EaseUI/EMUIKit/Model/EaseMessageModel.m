@@ -39,11 +39,11 @@
                 break;
             case EMMessageBodyTypeImage:
             {
-                EMImageMessageBody *imgMessageBody = (EMImageMessageBody *)_firstMessageBody;
-                NSData *imageData = [NSData dataWithContentsOfFile:imgMessageBody.localPath];
-                if (imageData.length) {
-                    self.image = [UIImage imageWithData:imageData];
-                }
+//                EMImageMessageBody *imgMessageBody = (EMImageMessageBody *)_firstMessageBody;
+//                NSData *imageData = [NSData dataWithContentsOfFile:imgMessageBody.localPath];
+//                if (imageData.length) {
+//                    self.image = [UIImage imageWithData:imageData];
+//                }
                 
                 if ([imgMessageBody.thumbnailLocalPath length] > 0) {
                     self.thumbnailImage = [UIImage imageWithContentsOfFile:imgMessageBody.thumbnailLocalPath];
@@ -55,6 +55,7 @@
                 
                 self.thumbnailImageSize = self.thumbnailImage.size;
                 self.imageSize = imgMessageBody.size;
+                self.fileLocalPath = imgMessageBody.localPath;
                 if (!_isSender) {
                     self.fileURLPath = imgMessageBody.remotePath;
                 }
@@ -77,6 +78,8 @@
                     self.isMediaPlayed = [[message.ext objectForKey:@"isPlayed"] boolValue];
                 }
                 
+                
+                self.fileLocalPath = voiceBody.localPath;
                 // audio file path
                 self.fileURLPath = voiceBody.remotePath;
             }
@@ -93,6 +96,7 @@
                     self.image = self.thumbnailImage;
                 }
                 
+                self.fileLocalPath = videoBody.localPath;
                 // video file path
                 self.fileURLPath = videoBody.remotePath;
             }
@@ -113,6 +117,7 @@
                 else if (self.fileSize < 2014 * 1024 * 1024){
                     self.fileSizeDes = [NSString stringWithFormat:@"%.2fMB", self.fileSize / (1024 * 1024)];
                 }
+                self.fileLocalPath = fileMessageBody.localPath;
             }
                 break;
             default:
@@ -148,26 +153,6 @@
     return _message.isReadAcked;
 }
 
-- (NSString *)fileLocalPath
-{
-    if (_firstMessageBody) {
-        switch (_firstMessageBody.type) {
-            case EMMessageBodyTypeVideo:
-            case EMMessageBodyTypeImage:
-            case EMMessageBodyTypeVoice:
-            case EMMessageBodyTypeFile:
-            {
-                EMFileMessageBody *fileBody = (EMFileMessageBody *)_firstMessageBody;
-                return fileBody.localPath;
-            }
-                break;
-            default:
-                break;
-        }
-    }
-    return nil;
-}
-
 - (UIImage *)scaleImage:(UIImage *)image toScale:(float)scaleSize
 {
     UIGraphicsBeginImageContext(CGSizeMake(image.size.width * scaleSize, image.size.height * scaleSize));
@@ -175,6 +160,24 @@
     UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return scaledImage;
+}
+
+#pragma mark - Equal
+- (BOOL)isEqual:(id)other
+{
+    if (other == self) {
+        return YES;
+    } else if ([other isKindOfClass:[EaseMessageModel class]] && [self.messageId isEqual:((EaseMessageModel *)other).messageId]) {
+        return YES;
+    } else if (![super isEqual:other]) {
+        return NO;
+    }
+    return NO;
+}
+
+- (NSUInteger)hash
+{
+    return [self.messageId hash];
 }
 
 @end
