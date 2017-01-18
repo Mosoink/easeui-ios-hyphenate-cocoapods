@@ -55,7 +55,7 @@
                 
                 self.thumbnailImageSize = self.thumbnailImage.size;
                 self.imageSize = imgMessageBody.size;
-                self.fileLocalPath = imgMessageBody.localPath;
+                _fileLocalPath = imgMessageBody.localPath;
                 if (!_isSender) {
                     self.fileURLPath = imgMessageBody.remotePath;
                 }
@@ -79,7 +79,7 @@
                 }
                 
                 
-                self.fileLocalPath = voiceBody.localPath;
+                _fileLocalPath = voiceBody.localPath;
                 // audio file path
                 self.fileURLPath = voiceBody.remotePath;
             }
@@ -96,7 +96,7 @@
                     self.image = self.thumbnailImage;
                 }
                 
-                self.fileLocalPath = videoBody.localPath;
+                _fileLocalPath = videoBody.localPath;
                 // video file path
                 self.fileURLPath = videoBody.remotePath;
             }
@@ -117,7 +117,7 @@
                 else if (self.fileSize < 2014 * 1024 * 1024){
                     self.fileSizeDes = [NSString stringWithFormat:@"%.2fMB", self.fileSize / (1024 * 1024)];
                 }
-                self.fileLocalPath = fileMessageBody.localPath;
+                _fileLocalPath = fileMessageBody.localPath;
             }
                 break;
             default:
