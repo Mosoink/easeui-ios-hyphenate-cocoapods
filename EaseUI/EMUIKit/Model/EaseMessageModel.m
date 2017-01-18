@@ -39,7 +39,7 @@
                 break;
             case EMMessageBodyTypeImage:
             {
-//                EMImageMessageBody *imgMessageBody = (EMImageMessageBody *)_firstMessageBody;
+                EMImageMessageBody *imgMessageBody = (EMImageMessageBody *)_firstMessageBody;
 //                NSData *imageData = [NSData dataWithContentsOfFile:imgMessageBody.localPath];
 //                if (imageData.length) {
 //                    self.image = [UIImage imageWithData:imageData];
